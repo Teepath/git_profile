@@ -1,5 +1,5 @@
 
- var token = GITHUB_TOKEN;
+ var token = process.env.GITHUB_TOKEN;
 
 function myFunction() {
  
@@ -77,7 +77,7 @@ myFunction()
 
 const getUserRepo = () => {
  
-  var token =GITHUB_TOKEN;
+  // var token =process.env.GITHUB_TOKEN;
   let username = document.getElementById("search_term").value;
 
   const git_data = {
