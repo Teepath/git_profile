@@ -117,79 +117,154 @@ parcelRequire = (function (modules, cache, entry, globalName) {
   }
 
   return newRequire;
-})({"node_modules/parcel-bundler/src/builtins/bundle-url.js":[function(require,module,exports) {
-var bundleURL = null;
+})({"index.js":[function(require,module,exports) {
+var token = "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";
 
-function getBundleURLCached() {
-  if (!bundleURL) {
-    bundleURL = getBundleURL();
-  }
-
-  return bundleURL;
-}
-
-function getBundleURL() {
-  // Attempt to find the URL of the current script and use that as the base URL
-  try {
-    throw new Error();
-  } catch (err) {
-    var matches = ('' + err.stack).match(/(https?|file|ftp|chrome-extension|moz-extension):\/\/[^)\n]+/g);
-
-    if (matches) {
-      return getBaseURL(matches[0]);
-    }
-  }
-
-  return '/';
-}
-
-function getBaseURL(url) {
-  return ('' + url).replace(/^((?:https?|file|ftp|chrome-extension|moz-extension):\/\/.+)?\/[^/]+(?:\?.*)?$/, '$1') + '/';
-}
-
-exports.getBundleURL = getBundleURLCached;
-exports.getBaseURL = getBaseURL;
-},{}],"node_modules/parcel-bundler/src/builtins/css-loader.js":[function(require,module,exports) {
-var bundle = require('./bundle-url');
-
-function updateLink(link) {
-  var newLink = link.cloneNode();
-
-  newLink.onload = function () {
-    link.remove();
+function myFunction() {
+  var username = document.getElementById("search_term").value;
+  var body = {
+    query: "query {\n    user(login:\"Teepath\" ){\n      avatarUrl\n      createdAt\n      bio\n      name\n      \n      email\n      repositories(first: 20, orderBy:{field: CREATED_AT, direction:DESC}){\n           edges{\n            node{\n              ... on Repository{\n                name,\n                id,\n                owner{\n                  login\n                },\n                stargazers{\n                  totalCount\n                },\n                primaryLanguage {\n                  name\n                }\n                description\n                url\n                pushedAt\n                updatedAt\n                forkCount\n               \n                \n               \n              }\n            }\n          }\n      }\n      \n    }\n  }\n  "
   };
-
-  newLink.href = link.href.split('?')[0] + '?' + Date.now();
-  link.parentNode.insertBefore(newLink, link.nextSibling);
+  var baseUrl = "https://api.github.com/graphql";
+  var headers = {
+    Authorization: "Bearer ".concat(token)
+  };
+  axios.post(baseUrl, JSON.stringify(body), {
+    method: "POST",
+    headers: headers
+  }).then(function (response) {
+    console.log(response.data.data.user.avatarUrl);
+    myLoadData(response.data.data);
+  }).catch(function (err) {
+    return console.log(JSON.stringify(err));
+  });
 }
 
-var cssTimeout = null;
+myFunction();
 
-function reloadCSS() {
-  if (cssTimeout) {
-    return;
-  }
-
-  cssTimeout = setTimeout(function () {
-    var links = document.querySelectorAll('link[rel="stylesheet"]');
-
-    for (var i = 0; i < links.length; i++) {
-      if (bundle.getBaseURL(links[i].href) === bundle.getBundleURL()) {
-        updateLink(links[i]);
-      }
-    }
-
-    cssTimeout = null;
-  }, 50);
+function getUserRepo() {
+  // var token =process.env.GITHUB_TOKEN;
+  var username = document.getElementById("search_term").value;
+  var git_data = {// "token": "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",
+    // "username": "Teepath",
+  };
+  var body = {
+    query: "query {\n    user(login:".concat(username !== "" ? JSON.stringify(username) : "Teepath", " ){\n      avatarUrl\n      createdAt\n      bio\n      name\n      \n      email\n      repositories(first: 20, orderBy:{field: CREATED_AT, direction:DESC}){\n           edges{\n            node{\n              ... on Repository{\n                name,\n                id,\n                owner{\n                  login\n                },\n                stargazers{\n                  totalCount\n                },\n                primaryLanguage {\n                  name\n                }\n                description\n                url\n                pushedAt\n                updatedAt\n                forkCount\n               \n                \n               \n              }\n            }\n          }\n      }\n      \n    }\n  }\n  ")
+  };
+  document.getElementById("display").innerHTML = "";
+  var baseUrl = "https://api.github.com/graphql";
+  var headers = {
+    Authorization: "Bearer ".concat(token)
+  };
+  axios.post(baseUrl, JSON.stringify(body), {
+    method: "POST",
+    headers: headers
+  }).then(function (response) {
+    console.log(response.data.data.user.avatarUrl);
+    myLoadData(response.data.data);
+  }).catch(function (err) {
+    return console.log(JSON.stringify(err));
+  });
 }
 
-module.exports = reloadCSS;
-},{"./bundle-url":"node_modules/parcel-bundler/src/builtins/bundle-url.js"}],"style.css":[function(require,module,exports) {
-var reloadCSS = require('_css_loader');
+var myLoadData = function myLoadData(data) {
+  var _data$user = data.user,
+      avatarUrl = _data$user.avatarUrl,
+      name = _data$user.name,
+      email = _data$user.email,
+      bio = _data$user.bio,
+      createdAt = _data$user.createdAt,
+      repositories = _data$user.repositories;
+  document.getElementById("avatar").src = avatarUrl;
+  document.getElementById("name").innerHTML = name;
+  var alias = document.getElementById("search_term").value;
+  document.getElementById("alias").innerHTML = alias;
+  document.getElementById("bio").innerHTML = bio;
+  document.getElementById("repo_total").innerHTML = repositories.edges.length; // console.log(repositories.edges);
 
-module.hot.dispose(reloadCSS);
-module.hot.accept(reloadCSS);
-},{"_css_loader":"node_modules/parcel-bundler/src/builtins/css-loader.js"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+  var displayList = document.getElementById('display'); // repositories.edges.forEach((file) => {
+  //   console.log(file)
+  // })
+
+  appendToDOM(repositories.edges);
+};
+
+var appendToDOM = function appendToDOM(res) {
+  var display = document.getElementById('display');
+  console.log(res);
+  res.map(function (_ref) {
+    var node = _ref.node;
+    var li = document.createElement('LI');
+    li.style.width = "100%";
+    li.style.display = "flex";
+    li.style.justifyContent = "space-between";
+    li.style.alignItems = "center";
+    li.style.borderBottom = " 1px solid grey";
+    li.id = node.url;
+    li.append(createDiv(node), buttonTag());
+    document.getElementById("display").appendChild(li);
+  });
+};
+
+var createTag = function createTag(node) {
+  var div = document.createElement('div');
+  div.style.width = "100%";
+  div.style.display = "flex";
+  div.style.justifyContent = "space-around";
+  div.style.alignItems = "center";
+  div.appendChild(updateAt(node));
+  return div;
+};
+
+var updateAt = function updateAt(node) {
+  var span = document.createElement('span');
+  span.innerHTML = "updated at ".concat(new Date(node.updatedAt));
+  return span;
+};
+
+var lang = function lang(node) {
+  var em = document.createElement('em'); // em.setAttribute("class", "fas fa-circle");
+
+  em.innerHTML = node.primaryLanguage.name;
+  return em;
+};
+
+var createDiv = function createDiv(node) {
+  // li.appendChild(mainInfo)
+  var div = document.createElement('div');
+  div.style.display = "flex";
+  div.style.flexDirection = "column";
+  div.style.justifyContent = "space-around";
+  div.style.alignItems = "flex-start";
+  div.style.width = "80%";
+  var repo_name = document.createElement('p');
+  repo_name.style.color = "blue";
+  repo_name.style.fontSize = "90%";
+  repo_name.innerHTML = node.name;
+  div.append(repo_name, createTag(node)); // div.appendChild(createLi(node), buttonTag())
+
+  return div;
+};
+
+var buttonTag = function buttonTag() {
+  var button = document.createElement('Button');
+  button.style.display = "flex";
+  button.style.justifyContent = " flex-end";
+  button.style.height = "30px";
+  buttonStar = document.createElement('em');
+  buttonStar.setAttribute('class', "fas fa-star");
+  button.innerHTML = "start";
+  button.appendChild(buttonStar);
+  return button;
+};
+
+var createEm = function createEm(node) {
+  var div = document.createElement('div');
+  div.setAttribute("class", "fas fa-circle");
+  div.innerHTML = node.primaryLanguage.name;
+  return div;
+};
+},{}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -393,5 +468,5 @@ function hmrAcceptRun(bundle, id) {
     return true;
   }
 }
-},{}]},{},["node_modules/parcel-bundler/src/builtins/hmr-runtime.js"], null)
-//# sourceMappingURL=/style.e308ff8e.js.map
+},{}]},{},["node_modules/parcel-bundler/src/builtins/hmr-runtime.js","index.js"], null)
+//# sourceMappingURL=/githubDemo.e31bb0bc.js.map

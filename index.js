@@ -2,11 +2,7 @@
  var token = process.env.GITHUB_KEY;
 
 function myFunction() {
-  
     let username = document.getElementById("search_term").value;
-    // document.getElementById("result").innerHTML = username;
-
- 
     const body = {
       query: `query {
     user(login:"Teepath" ){
@@ -52,7 +48,7 @@ function myFunction() {
     const baseUrl = "https://api.github.com/graphql";
 
     const headers = {
-      Authorization: `Bearer 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`,
+      Authorization: `Bearer ${token}`,
     };
 
     axios
@@ -75,7 +71,7 @@ function myFunction() {
 myFunction()
 
 
-const getUserRepo = () => {
+function getUserRepo(){
  
   // var token =process.env.GITHUB_TOKEN;
   let username = document.getElementById("search_term").value;
@@ -132,7 +128,7 @@ const getUserRepo = () => {
   const baseUrl = "https://api.github.com/graphql";
 
   const headers = {
-    Authorization: `Bearer ${token}`,
+    Authorization: `Bearer ${token}`
   };
 
   axios
