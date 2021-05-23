@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "http-server src -p 8080",
+    "netlify": "./node_modules/.bin/netlify"
   },
   "author": "Tunde Adebanjo",
   "license": "ISC",
@@ -17,5 +18,10 @@
     "graphql-client": "^2.0.1",
     "node": "^16.1.0",
     "parcel-bundler": "^1.12.5"
+  },
+  "devDependencies": {
+    "concurrently": "^6.1.0",
+    "http-server": "^0.12.3",
+    "netlify-cli": "^3.30.3"
   }
 }
