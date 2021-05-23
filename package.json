@@ -3,8 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "http-server src -p 8080",
-    "netlify": "./node_modules/.bin/netlify"
+    "dev": "parcel src/index.html",
+    "netlify": "./node_modules/.bin/netlify",
+    "build": "build src/index.html"
   },
   "author": "Tunde Adebanjo",
   "license": "ISC",
@@ -20,8 +21,6 @@
     "parcel-bundler": "^1.12.5"
   },
   "devDependencies": {
-    "concurrently": "^6.1.0",
-    "http-server": "^0.12.3",
     "netlify-cli": "^3.30.3"
   }
 }

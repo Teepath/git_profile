@@ -1,14 +1,14 @@
 
- var token = process.env.GITHUB_TOKEN;
+ var token = process.env.GITHUB_KEY;
 
 function myFunction() {
- 
-  let username = document.getElementById("search_term").value;
-  // document.getElementById("result").innerHTML = username;
+  
+    let username = document.getElementById("search_term").value;
+    // document.getElementById("result").innerHTML = username;
 
  
-  const body = {
-    query: `query {
+    const body = {
+      query: `query {
     user(login:"Teepath" ){
       avatarUrl
       createdAt
@@ -47,25 +47,25 @@ function myFunction() {
     }
   }
   `,
-  };
+    };
 
-  const baseUrl = "https://api.github.com/graphql";
+    const baseUrl = "https://api.github.com/graphql";
 
-  const headers = {
-    Authorization:`Bearer ${token}`,
-  };
+    const headers = {
+      Authorization: `Bearer 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`,
+    };
 
-  axios
-    .post(baseUrl, JSON.stringify(body), {
-      method: "POST",
-      headers: headers,
-    })
-    .then((response) => {
-      console.log(response.data.data.user.avatarUrl);
-     myLoadData(response.data.data);
+    axios
+      .post(baseUrl, JSON.stringify(body), {
+        method: "POST",
+        headers: headers,
+      })
+      .then((response) => {
+        console.log(response.data.data.user.avatarUrl);
+        myLoadData(response.data.data);
  
-    })
-    .catch((err) => console.log(JSON.stringify(err)));
+      })
+      .catch((err) => console.log(JSON.stringify(err)));
   
   
  
